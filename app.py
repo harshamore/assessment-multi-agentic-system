@@ -477,7 +477,7 @@ def facilitator_view(sess):
                 st.rerun()
             if d2.button("Delete session", disabled=not sure or code == "main", width="stretch"):
                 store.delete_session(code)
-                st.session_state.admin_code = "main"
+                st.session_state.admin_code_next = "main"
                 st.rerun()
 
 
@@ -489,13 +489,15 @@ def admin():
     names = {s["code"]: f"{s['name']} ({s['code']})" for s in sessions}
     with st.sidebar:
         st.markdown(f"**{TITLE}**  \nFacilitator")
+        if "admin_code_next" in st.session_state:
+            st.session_state.admin_code = st.session_state.pop("admin_code_next")
         if st.session_state.get("admin_code") not in codes:
             st.session_state.admin_code = codes[0]
         st.selectbox("Session", codes, format_func=names.get, key="admin_code")
         with st.form("newsess", clear_on_submit=True):
             nm = st.text_input("New session name", placeholder="e.g. Acme Bank, 4 Nov")
             if st.form_submit_button("Create session") and nm.strip():
-                st.session_state.admin_code = store.create_session(nm)
+                st.session_state.admin_code_next = store.create_session(nm)
                 st.rerun()
         st.toggle("Auto-refresh dashboards", value=True, key="auto")
         st.toggle("Preview with example answers", key="sample", help="Fictional answers, never saved.")
