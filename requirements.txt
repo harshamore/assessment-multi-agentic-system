@@ -4,5 +4,7 @@ streamlit>=1.50,<2
 sqlalchemy>=2.0,<2.2
 psycopg2-binary>=2.9,<3
 pandas>=2,<3
-altair>=5,<6
+# altair 5 cannot be imported on Python 3.14 (its generated TypedDicts use closed=True),
+# and Streamlit Cloud runs 3.14, so 6 must stay reachable.
+altair>=5,<7
 qrcode[pil]>=7.4,<9
