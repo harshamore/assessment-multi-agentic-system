@@ -1,6 +1,8 @@
-streamlit>=1.50
-sqlalchemy>=2.0
-psycopg2-binary>=2.9
-pandas
-altair>=5
-qrcode[pil]>=7.4
+# Upper bounds are deliberate: an unpinned sqlalchemy>=2.0 let a redeploy pick up 2.1,
+# which switched the default driver for "postgresql://" and broke the app at startup.
+streamlit>=1.50,<2
+sqlalchemy>=2.0,<2.2
+psycopg2-binary>=2.9,<3
+pandas>=2,<3
+altair>=5,<6
+qrcode[pil]>=7.4,<9

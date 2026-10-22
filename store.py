@@ -37,6 +37,11 @@ def engine():
     if url:
         if url.startswith("postgres://"):
             url = "postgresql://" + url[len("postgres://"):]
+        # Name the driver explicitly: SQLAlchemy 2.1 changed the default for a bare
+        # "postgresql://" URL from psycopg2 to psycopg 3, which this app does not install,
+        # so a bare URL fails on the first connect with ModuleNotFoundError.
+        if url.startswith("postgresql://"):
+            url = "postgresql+psycopg2://" + url[len("postgresql://"):]
         eng = create_engine(url, pool_pre_ping=True, pool_size=5, max_overflow=5)
     else:
         eng = create_engine("sqlite:///ttx.db", connect_args={"check_same_thread": False})
